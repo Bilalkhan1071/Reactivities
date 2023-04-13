@@ -19,7 +19,6 @@ namespace API.Controllers
         {
             _tokenService = tokenService;
             _userManager = userManager;
-
         }
 
         [AllowAnonymous]
@@ -46,12 +45,14 @@ namespace API.Controllers
         {
             if (await _userManager.Users.AnyAsync(x => x.UserName == registerDto.Username))
             {
-                return BadRequest("Username already taken");
+                ModelState.AddModelError("username", "Username taken");
+                return ValidationProblem();
             }
 
             if (await _userManager.Users.AnyAsync(x => x.Email == registerDto.Email))
             {
-                return BadRequest("Email already taken");
+                ModelState.AddModelError("email", "Email taken");
+                return ValidationProblem();
             }
 
             var user = new AppUser
@@ -71,7 +72,6 @@ namespace API.Controllers
             return BadRequest(result.Errors);
         }
 
-
         [Authorize]
         [HttpGet]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
@@ -79,9 +79,7 @@ namespace API.Controllers
             var user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
 
             return CreateUserObject(user);
-
         }
-
 
         private UserDto CreateUserObject(AppUser user)
         {
