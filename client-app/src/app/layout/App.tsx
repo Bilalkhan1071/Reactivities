@@ -6,7 +6,7 @@ import HomePage from '../../features/home/HomePage';
 import { ToastContainer } from 'react-toastify';
 import { useStore } from '../stores/store';
 import { useEffect } from 'react';
-import LoadingComponent from './LoadingComponents';
+import LoadingComponent from './LoadingComponent';
 import ModalContainer from '../common/modals/ModalContainer';
 
 function App() {
